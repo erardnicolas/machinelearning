@@ -155,37 +155,37 @@ confusionMatrix(testPred, testing$classe)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 2224   11    2    1    1
-##          B    3 1494   10    0    8
-##          C    0   10 1346   22    1
-##          D    4    3    8 1262    2
-##          E    1    1    3    2 1431
+##          A 2227    8    5    0    1
+##          B    3 1498   11    0    7
+##          C    0    9 1349   24    3
+##          D    1    3    2 1261    4
+##          E    1    1    2    2 1428
 ## 
 ## Overall Statistics
-##                                        
-##                Accuracy : 0.988        
-##                  95% CI : (0.986, 0.99)
-##     No Information Rate : 0.284        
-##     P-Value [Acc &gt; NIR] : &lt; 2e-16      
-##                                        
-##                   Kappa : 0.985        
-##  Mcnemar's Test P-Value : 0.00673      
+##                                         
+##                Accuracy : 0.989         
+##                  95% CI : (0.986, 0.991)
+##     No Information Rate : 0.284         
+##     P-Value [Acc &gt; NIR] : &lt; 2e-16       
+##                                         
+##                   Kappa : 0.986         
+##  Mcnemar's Test P-Value : 0.000104      
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             0.996    0.984    0.983    0.981    0.992
-## Specificity             0.997    0.997    0.995    0.997    0.999
-## Pos Pred Value          0.993    0.986    0.976    0.987    0.995
-## Neg Pred Value          0.999    0.996    0.996    0.996    0.998
+## Sensitivity             0.998    0.986    0.985    0.980    0.990
+## Specificity             0.998    0.997    0.994    0.998    0.999
+## Pos Pred Value          0.994    0.986    0.974    0.992    0.996
+## Neg Pred Value          0.999    0.997    0.997    0.996    0.998
 ## Prevalence              0.284    0.194    0.174    0.164    0.184
-## Detection Rate          0.283    0.190    0.171    0.161    0.182
-## Detection Prevalence    0.285    0.193    0.176    0.163    0.183
-## Balanced Accuracy       0.997    0.990    0.989    0.989    0.995</code></pre>
+## Detection Rate          0.284    0.191    0.172    0.161    0.182
+## Detection Prevalence    0.285    0.194    0.176    0.162    0.183
+## Balanced Accuracy       0.998    0.991    0.990    0.989    0.994</code></pre>
 <p>The model has an accuracy of around 99% on cross-validation test. This was deemed sufficient to predict the values of the classe for the test set.</p>
 </div>
-<div id="prediciton-on-the-test-set" class="section level3">
-<h3>Prediciton on the test set</h3>
+<div id="prediction-on-the-test-set" class="section level3">
+<h3>Prediction on the test set</h3>
 <p>The model was then use to predict the classe of the weight lifting exersize for 20 data points.</p>
 <pre class="r"><code>dataTest&lt;-read.csv('pml-testing.csv',row.names=1)
 dataTest&lt;-dataTest[t]

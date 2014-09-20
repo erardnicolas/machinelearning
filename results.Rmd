@@ -66,7 +66,7 @@ confusionMatrix(testPred, testing$classe)
 ```
 The model has an accuracy of around 99% on cross-validation test. This was deemed sufficient to predict the values of the classe for the test set.
 
-### Prediciton on the test set
+### Prediction on the test set
 The model was then use to predict the classe of the weight lifting exersize for 20 data points.
 
 ```{r}
