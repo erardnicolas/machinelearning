@@ -1,0 +1,76 @@
+Predicting good or bad lifting exercises from accelerometer data.
+========================================================
+The developement of cheap accelerometer has allowed scientist to efficently record accerelations of bodyparts while doing exercise. The aim of this project is to predict if a person is doing dumbell weight lifting correctly usinga number of recorded movement variables. The data used in this study comes from reference [1], and comprises 19622 observations from accelerometers on the belt, forearm, arm, and dumbell of participants doing dumbell weight lifting in five different manners.
+In the study, we will try to predict the manner in which the excercise was done given the accelerometer data.
+
+
+### Data loading and pre-processing
+Loading useful libraries
+```{r}
+library(caret)
+library(randomForest)
+```
+
+```{r loadData, cache=TRUE}
+data<-read.csv('pml-training.csv',row.names=1)
+data[data==""]<-NA
+t<-sapply(data, function(x) sum(is.na(x)) < 10000)
+dataClean<-data[sapply(data, function(x) sum(is.na(x)) < 10000)]
+dataClean<-dataClean[,c(-1,-2,-3,-4,-5,-6)]
+```
+
+All empty values were replaced by NAs and columns with more than 10000 NAs were removed from the datasets. Furthermore, username, timestamps and window information were also removed from the dataset.
+
+
+```{r createPartitions}
+testIndex<-createDataPartition(dataClean$classe,p=0.4,list=FALSE)
+training<-dataClean[-testIndex,]
+testing<-dataClean[testIndex,]
+```
+The data is split in a training set (60%) and a test set (40%).
+
+### Prediction model
+Because of the number of possible outcome, the model used will be a random forest. To speed up the model building, the data was preprocessed by PCA, to reduce the number of variables. The threshold for the cumulative percent of variance to be retained by PCA was set to 90%, 18 components were obtained.
+
+The cross-validation used for the training is the default bootstrapping method.
+
+```{r trainModel, cache=TRUE}
+preProc<-preProcess(training[,-53],method="pca",thresh=.9)
+trainingC<-predict(preProc,training[,-53])
+
+set.seed(1234)
+modelFit<-train(training$classe ~ . ,method="rf",data=trainingC)
+modelFit
+```
+Tree number 2 has an accuracy of 100% and was selected to continue the study. 
+
+### Prediction errors.
+In sample error was estimated to make sure no bias was present in the training set. 
+```{r}
+trainPred<-predict(modelFit,trainingC);
+confusionMatrix(trainPred, training$classe)
+```
+The accuracy of the model on the training set is 100%, so there is no bias problem but our model maybe overfits the data.
+
+Out of sample error was calculated by using the model to predict the classe for the values of the cross-validation set.
+```{r}
+testingC<-predict(preProc,testing[,-53])
+testPred<-predict(modelFit,testingC)
+confusionMatrix(testPred, testing$classe)
+```
+The model has an accuracy of around 99% on cross-validation test. This was deemed sufficient to predict the values of the classe for the test set.
+
+### Prediciton on the test set
+The model was then use to predict the classe of the weight lifting exersize for 20 data points.
+
+```{r}
+dataTest<-read.csv('pml-testing.csv',row.names=1)
+dataTest<-dataTest[t]
+dataTest<-dataTest[,c(-1,-2,-3,-4,-5,-6)]
+dataTestC<-predict(preProc,dataTest[,-53])
+pred<-predict(modelFit,dataTestC)
+pred
+```
+### References
+[1] Velloso, E.; Bulling, A.; Gellersen, H.; Ugulino, W.; Fuks, H. Qualitative Activity Recognition of Weight Lifting Exercises. Proceedings of 4th International Conference in Cooperation with SIGCHI (Augmented Human '13) . Stuttgart, Germany: ACM SIGCHI, 2013.
+
